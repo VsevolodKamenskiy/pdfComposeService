@@ -1,0 +1,21 @@
+syntax = "proto3";
+option go_package="/pdf_compose";
+package pdfCompose;
+
+// The request message containing the files to be composed.
+message ComposeRequest {
+  bytes upFile1 = 1; // Required: first file
+  bytes upFile2 = 2; // Required: second file
+  bytes upFile3 = 3; // Required: third file
+}
+
+// The response message containing the composed PDF file.
+message ComposeResponse {
+  bytes pdf_file = 1; // The resulting PDF file
+}
+
+// The PdfComposeService definition.
+service PdfComposeService {
+  // Sends files to be composed into a single PDF.
+  rpc Compose(ComposeRequest) returns (ComposeResponse);
+}

@@ -1,4 +1,4 @@
-module pdfComposeService
+module github.com/VsevolodKamenskiy/pdfComposeService
 
 go 1.23
 

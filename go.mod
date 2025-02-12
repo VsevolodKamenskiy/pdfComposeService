@@ -3,7 +3,6 @@ module github.com/VsevolodKamenskiy/pdfComposeService
 go 1.23
 
 require (
-	github.com/jung-kurt/gofpdf v1.16.2
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.5
 )

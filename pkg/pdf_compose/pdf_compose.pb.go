@@ -21,19 +21,159 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// The request message containing the files to be composed.
+type FileIdentifier int32
+
+const (
+	FileIdentifier_FILE_1 FileIdentifier = 0
+	FileIdentifier_FILE_2 FileIdentifier = 1
+	FileIdentifier_FILE_3 FileIdentifier = 2
+)
+
+// Enum value maps for FileIdentifier.
+var (
+	FileIdentifier_name = map[int32]string{
+		0: "FILE_1",
+		1: "FILE_2",
+		2: "FILE_3",
+	}
+	FileIdentifier_value = map[string]int32{
+		"FILE_1": 0,
+		"FILE_2": 1,
+		"FILE_3": 2,
+	}
+)
+
+func (x FileIdentifier) Enum() *FileIdentifier {
+	p := new(FileIdentifier)
+	*p = x
+	return p
+}
+
+func (x FileIdentifier) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (FileIdentifier) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_pdf_compose_proto_enumTypes[0].Descriptor()
+}
+
+func (FileIdentifier) Type() protoreflect.EnumType {
+	return &file_api_pdf_compose_proto_enumTypes[0]
+}
+
+func (x FileIdentifier) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use FileIdentifier.Descriptor instead.
+func (FileIdentifier) EnumDescriptor() ([]byte, []int) {
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{0}
+}
+
+type UploadStatusCode int32
+
+const (
+	UploadStatusCode_Unknown UploadStatusCode = 0
+	UploadStatusCode_Ok      UploadStatusCode = 1
+	UploadStatusCode_Failed  UploadStatusCode = 2
+)
+
+// Enum value maps for UploadStatusCode.
+var (
+	UploadStatusCode_name = map[int32]string{
+		0: "Unknown",
+		1: "Ok",
+		2: "Failed",
+	}
+	UploadStatusCode_value = map[string]int32{
+		"Unknown": 0,
+		"Ok":      1,
+		"Failed":  2,
+	}
+)
+
+func (x UploadStatusCode) Enum() *UploadStatusCode {
+	p := new(UploadStatusCode)
+	*p = x
+	return p
+}
+
+func (x UploadStatusCode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (UploadStatusCode) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_pdf_compose_proto_enumTypes[1].Descriptor()
+}
+
+func (UploadStatusCode) Type() protoreflect.EnumType {
+	return &file_api_pdf_compose_proto_enumTypes[1]
+}
+
+func (x UploadStatusCode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use UploadStatusCode.Descriptor instead.
+func (UploadStatusCode) EnumDescriptor() ([]byte, []int) {
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{1}
+}
+
+type Chunk struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Content       []byte                 `protobuf:"bytes,1,opt,name=Content,proto3" json:"Content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Chunk) Reset() {
+	*x = Chunk{}
+	mi := &file_api_pdf_compose_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Chunk) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Chunk) ProtoMessage() {}
+
+func (x *Chunk) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pdf_compose_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Chunk.ProtoReflect.Descriptor instead.
+func (*Chunk) Descriptor() ([]byte, []int) {
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Chunk) GetContent() []byte {
+	if x != nil {
+		return x.Content
+	}
+	return nil
+}
+
 type ComposeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UpFile1       []byte                 `protobuf:"bytes,1,opt,name=upFile1,proto3" json:"upFile1,omitempty"` // Required: first file
-	UpFile2       []byte                 `protobuf:"bytes,2,opt,name=upFile2,proto3" json:"upFile2,omitempty"` // Required: second file
-	UpFile3       []byte                 `protobuf:"bytes,3,opt,name=upFile3,proto3" json:"upFile3,omitempty"` // Required: third file
+	FileId        FileIdentifier         `protobuf:"varint,1,opt,name=file_id,json=fileId,proto3,enum=pdfCompose.FileIdentifier" json:"file_id,omitempty"` // Which file this chunk belongs to
+	Chunk         *Chunk                 `protobuf:"bytes,2,opt,name=chunk,proto3" json:"chunk,omitempty"`                                                 // The chunk data
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ComposeRequest) Reset() {
 	*x = ComposeRequest{}
-	mi := &file_api_pdf_compose_proto_msgTypes[0]
+	mi := &file_api_pdf_compose_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +185,7 @@ func (x *ComposeRequest) String() string {
 func (*ComposeRequest) ProtoMessage() {}
 
 func (x *ComposeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_pdf_compose_proto_msgTypes[0]
+	mi := &file_api_pdf_compose_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,41 +198,89 @@ func (x *ComposeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComposeRequest.ProtoReflect.Descriptor instead.
 func (*ComposeRequest) Descriptor() ([]byte, []int) {
-	return file_api_pdf_compose_proto_rawDescGZIP(), []int{0}
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ComposeRequest) GetUpFile1() []byte {
+func (x *ComposeRequest) GetFileId() FileIdentifier {
 	if x != nil {
-		return x.UpFile1
+		return x.FileId
+	}
+	return FileIdentifier_FILE_1
+}
+
+func (x *ComposeRequest) GetChunk() *Chunk {
+	if x != nil {
+		return x.Chunk
 	}
 	return nil
 }
 
-func (x *ComposeRequest) GetUpFile2() []byte {
-	if x != nil {
-		return x.UpFile2
-	}
-	return nil
-}
-
-func (x *ComposeRequest) GetUpFile3() []byte {
-	if x != nil {
-		return x.UpFile3
-	}
-	return nil
-}
-
-// The response message containing the composed PDF file.
-type ComposeResponse struct {
+type UploadStatus struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PdfFile       []byte                 `protobuf:"bytes,1,opt,name=pdf_file,json=pdfFile,proto3" json:"pdf_file,omitempty"` // The resulting PDF file
+	Message       string                 `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+	Code          UploadStatusCode       `protobuf:"varint,2,opt,name=Code,proto3,enum=pdfCompose.UploadStatusCode" json:"Code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadStatus) Reset() {
+	*x = UploadStatus{}
+	mi := &file_api_pdf_compose_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadStatus) ProtoMessage() {}
+
+func (x *UploadStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pdf_compose_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadStatus.ProtoReflect.Descriptor instead.
+func (*UploadStatus) Descriptor() ([]byte, []int) {
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UploadStatus) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *UploadStatus) GetCode() UploadStatusCode {
+	if x != nil {
+		return x.Code
+	}
+	return UploadStatusCode_Unknown
+}
+
+type ComposeResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Response:
+	//
+	//	*ComposeResponse_PdfChunk
+	//	*ComposeResponse_Status
+	Response      isComposeResponse_Response `protobuf_oneof:"response"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ComposeResponse) Reset() {
 	*x = ComposeResponse{}
-	mi := &file_api_pdf_compose_proto_msgTypes[1]
+	mi := &file_api_pdf_compose_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +292,7 @@ func (x *ComposeResponse) String() string {
 func (*ComposeResponse) ProtoMessage() {}
 
 func (x *ComposeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_pdf_compose_proto_msgTypes[1]
+	mi := &file_api_pdf_compose_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,38 +305,93 @@ func (x *ComposeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComposeResponse.ProtoReflect.Descriptor instead.
 func (*ComposeResponse) Descriptor() ([]byte, []int) {
-	return file_api_pdf_compose_proto_rawDescGZIP(), []int{1}
+	return file_api_pdf_compose_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ComposeResponse) GetPdfFile() []byte {
+func (x *ComposeResponse) GetResponse() isComposeResponse_Response {
 	if x != nil {
-		return x.PdfFile
+		return x.Response
 	}
 	return nil
 }
+
+func (x *ComposeResponse) GetPdfChunk() *Chunk {
+	if x != nil {
+		if x, ok := x.Response.(*ComposeResponse_PdfChunk); ok {
+			return x.PdfChunk
+		}
+	}
+	return nil
+}
+
+func (x *ComposeResponse) GetStatus() *UploadStatus {
+	if x != nil {
+		if x, ok := x.Response.(*ComposeResponse_Status); ok {
+			return x.Status
+		}
+	}
+	return nil
+}
+
+type isComposeResponse_Response interface {
+	isComposeResponse_Response()
+}
+
+type ComposeResponse_PdfChunk struct {
+	PdfChunk *Chunk `protobuf:"bytes,1,opt,name=pdf_chunk,json=pdfChunk,proto3,oneof"` // PDF data chunk
+}
+
+type ComposeResponse_Status struct {
+	Status *UploadStatus `protobuf:"bytes,2,opt,name=status,proto3,oneof"` // Upload acknowledgment
+}
+
+func (*ComposeResponse_PdfChunk) isComposeResponse_Response() {}
+
+func (*ComposeResponse_Status) isComposeResponse_Response() {}
 
 var File_api_pdf_compose_proto protoreflect.FileDescriptor
 
 var file_api_pdf_compose_proto_rawDesc = string([]byte{
 	0x0a, 0x15, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x64, 0x66, 0x5f, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x73,
 	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0a, 0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70,
-	0x6f, 0x73, 0x65, 0x22, 0x5e, 0x0a, 0x0e, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x75, 0x70, 0x46, 0x69, 0x6c, 0x65, 0x31,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x75, 0x70, 0x46, 0x69, 0x6c, 0x65, 0x31, 0x12,
-	0x18, 0x0a, 0x07, 0x75, 0x70, 0x46, 0x69, 0x6c, 0x65, 0x32, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c,
-	0x52, 0x07, 0x75, 0x70, 0x46, 0x69, 0x6c, 0x65, 0x32, 0x12, 0x18, 0x0a, 0x07, 0x75, 0x70, 0x46,
-	0x69, 0x6c, 0x65, 0x33, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x75, 0x70, 0x46, 0x69,
-	0x6c, 0x65, 0x33, 0x22, 0x2c, 0x0a, 0x0f, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x70, 0x64, 0x66, 0x5f, 0x66, 0x69,
-	0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x70, 0x64, 0x66, 0x46, 0x69, 0x6c,
-	0x65, 0x32, 0x57, 0x0a, 0x11, 0x50, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x42, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73,
-	0x65, 0x12, 0x1a, 0x2e, 0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x43,
-	0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
-	0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x6f,
-	0x73, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0e, 0x5a, 0x0c, 0x2f, 0x70,
-	0x64, 0x66, 0x5f, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x6f, 0x73, 0x65, 0x22, 0x21, 0x0a, 0x05, 0x43, 0x68, 0x75, 0x6e, 0x6b, 0x12, 0x18, 0x0a, 0x07,
+	0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x43,
+	0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x6e, 0x0a, 0x0e, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x33, 0x0a, 0x07, 0x66, 0x69, 0x6c, 0x65,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1a, 0x2e, 0x70, 0x64, 0x66, 0x43,
+	0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x49, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x66, 0x69, 0x65, 0x72, 0x52, 0x06, 0x66, 0x69, 0x6c, 0x65, 0x49, 0x64, 0x12, 0x27, 0x0a,
+	0x05, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70,
+	0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x43, 0x68, 0x75, 0x6e, 0x6b, 0x52,
+	0x05, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x22, 0x5a, 0x0a, 0x0c, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x12, 0x30, 0x0a, 0x04, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1c,
+	0x2e, 0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x55, 0x70, 0x6c, 0x6f,
+	0x61, 0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x04, 0x43, 0x6f,
+	0x64, 0x65, 0x22, 0x83, 0x01, 0x0a, 0x0f, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x30, 0x0a, 0x09, 0x70, 0x64, 0x66, 0x5f, 0x63, 0x68,
+	0x75, 0x6e, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x70, 0x64, 0x66, 0x43,
+	0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x43, 0x68, 0x75, 0x6e, 0x6b, 0x48, 0x00, 0x52, 0x08,
+	0x70, 0x64, 0x66, 0x43, 0x68, 0x75, 0x6e, 0x6b, 0x12, 0x32, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x70, 0x64, 0x66, 0x43, 0x6f,
+	0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x48, 0x00, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x42, 0x0a, 0x0a, 0x08,
+	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2a, 0x34, 0x0a, 0x0e, 0x46, 0x69, 0x6c, 0x65,
+	0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x49,
+	0x4c, 0x45, 0x5f, 0x31, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x49, 0x4c, 0x45, 0x5f, 0x32,
+	0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x49, 0x4c, 0x45, 0x5f, 0x33, 0x10, 0x02, 0x2a, 0x33,
+	0x0a, 0x10, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x43, 0x6f,
+	0x64, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x10, 0x00, 0x12,
+	0x06, 0x0a, 0x02, 0x4f, 0x6b, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x61, 0x69, 0x6c, 0x65,
+	0x64, 0x10, 0x02, 0x32, 0x5b, 0x0a, 0x11, 0x50, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73,
+	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x46, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70,
+	0x6f, 0x73, 0x65, 0x12, 0x1a, 0x2e, 0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65,
+	0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1b, 0x2e, 0x70, 0x64, 0x66, 0x43, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65, 0x2e, 0x43, 0x6f, 0x6d,
+	0x70, 0x6f, 0x73, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01,
+	0x42, 0x0e, 0x5a, 0x0c, 0x2f, 0x70, 0x64, 0x66, 0x5f, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x73, 0x65,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 })
 
 var (
@@ -163,19 +406,29 @@ func file_api_pdf_compose_proto_rawDescGZIP() []byte {
 	return file_api_pdf_compose_proto_rawDescData
 }
 
-var file_api_pdf_compose_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_api_pdf_compose_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_api_pdf_compose_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_pdf_compose_proto_goTypes = []any{
-	(*ComposeRequest)(nil),  // 0: pdfCompose.ComposeRequest
-	(*ComposeResponse)(nil), // 1: pdfCompose.ComposeResponse
+	(FileIdentifier)(0),     // 0: pdfCompose.FileIdentifier
+	(UploadStatusCode)(0),   // 1: pdfCompose.UploadStatusCode
+	(*Chunk)(nil),           // 2: pdfCompose.Chunk
+	(*ComposeRequest)(nil),  // 3: pdfCompose.ComposeRequest
+	(*UploadStatus)(nil),    // 4: pdfCompose.UploadStatus
+	(*ComposeResponse)(nil), // 5: pdfCompose.ComposeResponse
 }
 var file_api_pdf_compose_proto_depIdxs = []int32{
-	0, // 0: pdfCompose.PdfComposeService.Compose:input_type -> pdfCompose.ComposeRequest
-	1, // 1: pdfCompose.PdfComposeService.Compose:output_type -> pdfCompose.ComposeResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: pdfCompose.ComposeRequest.file_id:type_name -> pdfCompose.FileIdentifier
+	2, // 1: pdfCompose.ComposeRequest.chunk:type_name -> pdfCompose.Chunk
+	1, // 2: pdfCompose.UploadStatus.Code:type_name -> pdfCompose.UploadStatusCode
+	2, // 3: pdfCompose.ComposeResponse.pdf_chunk:type_name -> pdfCompose.Chunk
+	4, // 4: pdfCompose.ComposeResponse.status:type_name -> pdfCompose.UploadStatus
+	3, // 5: pdfCompose.PdfComposeService.Compose:input_type -> pdfCompose.ComposeRequest
+	5, // 6: pdfCompose.PdfComposeService.Compose:output_type -> pdfCompose.ComposeResponse
+	6, // [6:7] is the sub-list for method output_type
+	5, // [5:6] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_api_pdf_compose_proto_init() }
@@ -183,18 +436,23 @@ func file_api_pdf_compose_proto_init() {
 	if File_api_pdf_compose_proto != nil {
 		return
 	}
+	file_api_pdf_compose_proto_msgTypes[3].OneofWrappers = []any{
+		(*ComposeResponse_PdfChunk)(nil),
+		(*ComposeResponse_Status)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_pdf_compose_proto_rawDesc), len(file_api_pdf_compose_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_api_pdf_compose_proto_goTypes,
 		DependencyIndexes: file_api_pdf_compose_proto_depIdxs,
+		EnumInfos:         file_api_pdf_compose_proto_enumTypes,
 		MessageInfos:      file_api_pdf_compose_proto_msgTypes,
 	}.Build()
 	File_api_pdf_compose_proto = out.File

@@ -25,11 +25,8 @@ const (
 // PdfComposeServiceClient is the client API for PdfComposeService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// The PdfComposeService definition.
 type PdfComposeServiceClient interface {
-	// Sends files to be composed into a single PDF.
-	Compose(ctx context.Context, in *ComposeRequest, opts ...grpc.CallOption) (*ComposeResponse, error)
+	Compose(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ComposeRequest, ComposeResponse], error)
 }
 
 type pdfComposeServiceClient struct {
@@ -40,24 +37,24 @@ func NewPdfComposeServiceClient(cc grpc.ClientConnInterface) PdfComposeServiceCl
 	return &pdfComposeServiceClient{cc}
 }
 
-func (c *pdfComposeServiceClient) Compose(ctx context.Context, in *ComposeRequest, opts ...grpc.CallOption) (*ComposeResponse, error) {
+func (c *pdfComposeServiceClient) Compose(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ComposeRequest, ComposeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ComposeResponse)
-	err := c.cc.Invoke(ctx, PdfComposeService_Compose_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &PdfComposeService_ServiceDesc.Streams[0], PdfComposeService_Compose_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &grpc.GenericClientStream[ComposeRequest, ComposeResponse]{ClientStream: stream}
+	return x, nil
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PdfComposeService_ComposeClient = grpc.BidiStreamingClient[ComposeRequest, ComposeResponse]
 
 // PdfComposeServiceServer is the server API for PdfComposeService service.
 // All implementations must embed UnimplementedPdfComposeServiceServer
 // for forward compatibility.
-//
-// The PdfComposeService definition.
 type PdfComposeServiceServer interface {
-	// Sends files to be composed into a single PDF.
-	Compose(context.Context, *ComposeRequest) (*ComposeResponse, error)
+	Compose(grpc.BidiStreamingServer[ComposeRequest, ComposeResponse]) error
 	mustEmbedUnimplementedPdfComposeServiceServer()
 }
 
@@ -68,8 +65,8 @@ type PdfComposeServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedPdfComposeServiceServer struct{}
 
-func (UnimplementedPdfComposeServiceServer) Compose(context.Context, *ComposeRequest) (*ComposeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Compose not implemented")
+func (UnimplementedPdfComposeServiceServer) Compose(grpc.BidiStreamingServer[ComposeRequest, ComposeResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method Compose not implemented")
 }
 func (UnimplementedPdfComposeServiceServer) mustEmbedUnimplementedPdfComposeServiceServer() {}
 func (UnimplementedPdfComposeServiceServer) testEmbeddedByValue()                           {}
@@ -92,23 +89,12 @@ func RegisterPdfComposeServiceServer(s grpc.ServiceRegistrar, srv PdfComposeServ
 	s.RegisterService(&PdfComposeService_ServiceDesc, srv)
 }
 
-func _PdfComposeService_Compose_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ComposeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PdfComposeServiceServer).Compose(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: PdfComposeService_Compose_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PdfComposeServiceServer).Compose(ctx, req.(*ComposeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _PdfComposeService_Compose_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PdfComposeServiceServer).Compose(&grpc.GenericServerStream[ComposeRequest, ComposeResponse]{ServerStream: stream})
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PdfComposeService_ComposeServer = grpc.BidiStreamingServer[ComposeRequest, ComposeResponse]
 
 // PdfComposeService_ServiceDesc is the grpc.ServiceDesc for PdfComposeService service.
 // It's only intended for direct use with grpc.RegisterService,
@@ -116,12 +102,14 @@ func _PdfComposeService_Compose_Handler(srv interface{}, ctx context.Context, de
 var PdfComposeService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pdfCompose.PdfComposeService",
 	HandlerType: (*PdfComposeServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "Compose",
-			Handler:    _PdfComposeService_Compose_Handler,
+			StreamName:    "Compose",
+			Handler:       _PdfComposeService_Compose_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "api/pdf_compose.proto",
 }

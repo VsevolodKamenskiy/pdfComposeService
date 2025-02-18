@@ -1,21 +1,40 @@
 syntax = "proto3";
-option go_package="/pdf_compose";
+option go_package = "/pdf_compose";
 package pdfCompose;
 
-// The request message containing the files to be composed.
+enum FileIdentifier {
+  FILE_1 = 0;
+  FILE_2 = 1;
+  FILE_3 = 2;
+}
+
+message Chunk {
+  bytes Content = 1;
+}
+
 message ComposeRequest {
-  bytes upFile1 = 1; // Required: first file
-  bytes upFile2 = 2; // Required: second file
-  bytes upFile3 = 3; // Required: third file
+  FileIdentifier file_id = 1;  // Which file this chunk belongs to
+  Chunk chunk = 2;             // The chunk data
 }
 
-// The response message containing the composed PDF file.
+message UploadStatus {
+  string Message = 1;
+  UploadStatusCode Code = 2;
+}
+
+enum UploadStatusCode {
+  Unknown = 0;
+  Ok = 1;
+  Failed = 2;
+}
+
 message ComposeResponse {
-  bytes pdf_file = 1; // The resulting PDF file
+  oneof response {
+    Chunk pdf_chunk = 1;      // PDF data chunk
+    UploadStatus status = 2;  // Upload acknowledgment
+  }
 }
 
-// The PdfComposeService definition.
 service PdfComposeService {
-  // Sends files to be composed into a single PDF.
-  rpc Compose(ComposeRequest) returns (ComposeResponse);
+  rpc Compose(stream ComposeRequest) returns (stream ComposeResponse);
 }
